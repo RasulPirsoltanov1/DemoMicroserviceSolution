@@ -1,0 +1,79 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "api/gateway/customer",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/customer",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customerwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamScheme": "https"
+    },
+    {
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "UpstreamPathTemplate": "api/gateway/customer/{customerId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customerwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamPathTemplate": "/api/customer/{customerId}"
+    },
+    {
+      "UpstreamPathTemplate": "api/gateway/product",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/product",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamScheme": "https"
+    },
+    {
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "UpstreamPathTemplate": "api/gateway/product/{productId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamPathTemplate": "/api/product/{productId}"
+    },
+    {
+      "UpstreamPathTemplate": "api/gateway/order",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/order",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamScheme": "https"
+    },
+    {
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "UpstreamPathTemplate": "api/gateway/order/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderwebapi",
+          "Port": 8081
+        }
+      ],
+      "DownstreamPathTemplate": "/api/order/{customerId}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:8011"
+  }
+}

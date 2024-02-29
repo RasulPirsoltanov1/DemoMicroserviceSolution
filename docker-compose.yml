@@ -1,0 +1,95 @@
+version: '3.4'
+
+networks:
+  backend:
+
+
+volumes:
+  customerdb-volume:
+  productdb-volume:
+  mongodb-data:
+
+
+services:
+  customerdb:
+    container_name: customerdb
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    networks:
+      - backend
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Rasul123.
+    ports:
+      - 8001:1433
+    volumes:
+      - customerdb-volume:/var/opt/mssql
+
+  customerwebapi:
+    container_name: customerwebapi
+    image: ${DOCKER_REGISTRY-}customerwebapi
+    build:
+      context: .
+      dockerfile: Microservices/CustomerWebApi/Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_HOST=customerdb
+      - DB_NAME=customer
+      - DB_SA_PASSWORD=Rasul123.
+
+  productdb:
+    container_name: productdb
+    image: mysql:8-oracle
+    ports:
+      - 8004:3306
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: Rasul123.
+    volumes:
+      - productdb-volume:/var/lib/mysql
+
+  productwebapi:
+    container_name: productwebapi
+    image: ${DOCKER_REGISTRY-}productwebapi
+    build:
+      context: .
+      dockerfile: Microservices/ProductWebApi/Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_HOST=productdb
+      - DB_NAME=product
+      - MYSQL_ROOT_PASSWORD=Rasul123.
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    networks:
+      - backend
+    ports:
+      - 8007:27017
+    volumes:
+      - mongodb-data:/data/db
+
+  orderwebapi:
+    container_name: orderwebapi
+    image: ${DOCKER_REGISTRY-}orderwebapi
+    build:
+      context: .
+      dockerfile: Microservices/OrderWebApi/Dockerfile
+    networks:
+      - backend
+    environment:
+      - DB_HOST=mongodb
+      - DB_NAME=order
+
+  apigateway:
+    container_name: apigateway
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: Gateway/ApiGateway/Dockerfile
+    networks:
+      - backend
